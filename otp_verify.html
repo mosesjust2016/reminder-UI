@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reminder | Verify OTP </title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	<link href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" rel="stylesheet" id="fontawesome-css">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container">	
+<div class="card bg-light rcorners2">
+    	
+	<article class="card-body mx-auto">
+		<div id="spinner"></div>
+                           
+        <div id="message">
+            <div class="alert alert-primary alert-dismissible"  >
+                <strong>Registered Successfully!</strong> 
+            </div>
+        </div>
+
+		<h4 class="card-title mt-3 text-center" style="margin: 45px;">Account Activation</h4>
+		
+		<form class="otp__form">
+		    
+            <input type="hidden" name="platform" id="platform" value="web" required>
+                
+            <div class="form-group input-group" >
+                <div class="input-group-prepend">
+                    <span class="input-group-text"> <i class="fa fa-key"></i> </span>
+                </div>
+                
+                <input name="otp"  id="otp" class="form-control" placeholder="OTP" type="text"  maxlength="9"  pattern="\d{9}" required>
+            </div>
+
+            <div class="form-group">
+                <br>
+                <button type="submit" class="btn btn-primary btn-block"> Verify </button>
+            </div>  
+            
+            <p class="text-center"> 
+                <small>I do not have a password <a href="index.html">login</a></small><br>
+                <small>I do not have an account <a href="register.html">register</a></small><br>
+                <small>I forgot my password <a href="reset.html">reset</a></small>
+             </p>
+		                                                                
+	</form>
+	</article>
+</div>
+</div> 
+
+
+
+<script>
+
+		
+			const dateControl = document.querySelector('input[type="date"]');
+			dateControl.value = '1980-01-01';
+
+			const spinner = document.getElementById("spinner");
+			const message = document.getElementById("message");
+			const errmessage = document.getElementById("errormessage");
+			
+			let elementFName = document.getElementById("firstname")
+			let elementLName = document.getElementById("lastname")
+			let elementCode = document.getElementById("code")
+			let elementPhone = document.getElementById("wanumber")
+			let elementDOB = document.getElementById("dob")
+			let elementTerms = document.getElementById("accepted_terms")
+			
+			
+
+			function showSpinner() {
+			spinner.className = "show";
+			}
+
+			function hideSpinner() {
+					spinner.className = spinner.className.replace("show", "");      
+			}
+
+		
+
+			function showMessage() {  
+			message.className = "show"
+			setTimeout(() => {
+					message.className = message.className.replace("show", "");
+				}, 5000);
+			}
+
+			const formSendCallMeBack  = document.querySelector('.otp__form')
+
+			formSendCallMeBack.addEventListener('submit', event =>{
+				event.preventDefault();
+				showSpinner()
+
+				const formData = new FormData(formSendCallMeBack);
+				const data = Object.fromEntries(formData);
+
+				elementFName.disabled = true;
+				elementLName.disabled = true;
+				elementCode.disabled = true;
+				elementPhone.disabled = true;
+				elementDOB.disabled = true;
+				elementTerms.disabled = true;
+			
+				fetch('http://127.0.0.1:5000/reminder_membership/registration', {
+					method: 'POST',
+					headers:{
+						'Content-Type':'application/json',
+						'Access-Control-Allow-Origin':'*',
+						'Access-Control-Allow-Methods':'POST'
+					},
+					body: JSON.stringify(data)
+				}).then(res => res.json())
+				.then(data => {
+					hideSpinner();
+
+					elementFName.disabled = false;
+					elementLName.disabled = false;
+					elementCode.disabled = false;
+					elementPhone.disabled = false;
+					elementDOB.disabled = false;
+					elementTerms.disabled = false;
+					showMessage(); 
+								
+					elementFName.value = ""
+					elementLName.value = ""
+					elementPhone.value = ""
+					elementDOB.value = ""
+					elementTerms.checked = false;
+				})
+				
+				.catch(error=>{
+					hideSpinner();
+					elementFName.disabled = false;
+					elementLName.disabled = false;
+					elementCode.disabled = false;
+					elementPhone.disabled = false;
+					elementDOB.disabled = false;
+					elementTerms.disabled = false;
+					showErrorMessage()
+					elementFName.value = ""
+					elementLName.value = ""
+					elementCode.value = 0
+					elementPhone.value = ""
+					elementDOB.value = ""
+					elementTerms.checked = false;
+				})			
+			})
+		
+</script>
+
+</body>
+</html>
