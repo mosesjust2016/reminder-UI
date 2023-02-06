@@ -95,7 +95,7 @@
 			elementPhone.disabled = true;
 				
 			
-			fetch('https://reminder.mosesjasi.tk/account_management/activate', {
+			fetch('http://127.0.0.1:5500/account_management/activate', {
 					method: 'POST',
 					headers:{
 						'Content-Type':'application/json',
@@ -109,15 +109,16 @@
 				elementPhone.disabled = false;
 				showMessage();
 				document.cookie="access_token="+data['public_id']
-				window.location.replace("https://reminder.mosesjasi.tk/otp_verify.html"); 
+				window.location.replace("http://127.0.0.1:5500/otp_verify.html"); 
 				elementPhone.value = ""
 									
 			})
 				
 			.catch(error=>{
+				console.log(JSON.parse(error))
 				hideSpinner();
 				elementPhone.disabled = false;
-				showErrorMessage()
+				//showErrorMessage()
 				elementPhone.value = ""					
 			})
 				
