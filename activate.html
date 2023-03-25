@@ -95,7 +95,7 @@
 			elementPhone.disabled = true;
 				
 			
-			fetch('http://127.0.0.1:5500/account_management/activate', {
+			fetch('https://reminder.mosesjasi.biz/account_management/activate', {
 					method: 'POST',
 					headers:{
 						'Content-Type':'application/json',
@@ -109,7 +109,7 @@
 				elementPhone.disabled = false;
 				showMessage();
 				document.cookie="access_token="+data['public_id']
-				window.location.replace("http://127.0.0.1:5500/otp_verify.html"); 
+				window.location.replace("https://reminder.mosesjasi.biz/otp_verify.html"); 
 				elementPhone.value = ""
 									
 			})
